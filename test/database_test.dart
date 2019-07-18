@@ -12,7 +12,7 @@ void main() {
         useFirestore: true,
         storeConfigurations: {
           "xyzzy": semstore.StoreConfiguration(
-            firestoreCollectionName: null, //"xyzzy_collection",
+            firestoreCollectionName: "xyzzy_collection",
           )
         },
       );

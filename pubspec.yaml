@@ -16,10 +16,14 @@ dependencies:
   sembast: ^1.17.0
   cloud_firestore: ^0.12.7
   path_provider: ^1.1.2
+  get_it: ^1.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  mockito: ^4.1.0
+
 
 
 # For information on the generic Dart part of this file, see the

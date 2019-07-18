@@ -22,41 +22,44 @@ class Database {
   Future<void> openSemstore() async {
     _semDb = await _openSembast(_path);
 
-    _fireDb = await _openFirestore();
+    if (_configuration.useFirestore) {
+      _fireDb = await _openFirestore();
+      _configuration.storeConfigurations.forEach((storeName, storeConfiguration) {
+        print("connecting store $storeName to firestore collection ${storeConfiguration.firestoreCollectionName}");
+      });
+    }
   }
 
   /// the sembast database
   @visibleForTesting
-  get semDb => _semDb;
+  sembast.Database get semDb => _semDb;
   sembast.Database _semDb;
 
   /// the Firestore database
   @visibleForTesting
-  get fireDb => _fireDb;
+  firestore.Firestore get fireDb => _fireDb;
   firestore.Firestore _fireDb;
 
   /// path of the database
   @visibleForTesting
-  get path => _path;
+  String get path => _path;
   String _path;
 
   /// a userId
   @visibleForTesting
-  get userId => _userId;
+  String get userId => _userId;
   String _userId;
 
   /// the Configuration info
   @visibleForTesting
-  get configuration => _configuration;
-  var _configuration;
+  Configuration get configuration => _configuration;
+  Configuration _configuration;
 
   // open the sembast part
   Future<sembast.Database> _openSembast(String path) async {
-    if (_configuration.sembastPersistent) {
-      return await sembast_io.databaseFactoryIo.openDatabase(path);
-    } else {
-      return await sembast_memory.databaseFactoryMemory.openDatabase(path);
-    }
+    return _configuration.sembastPersistent
+        ? await sembast_io.databaseFactoryIo.openDatabase(path)
+        : await sembast_memory.databaseFactoryMemory.openDatabase(path);
   }
 
   // open the firestore part
